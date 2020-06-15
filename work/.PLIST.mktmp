@@ -1,0 +1,11 @@
+/usr/local/share/licenses/pfSense-pkg-zerotier-0.00.1/catalog.mk
+/usr/local/share/licenses/pfSense-pkg-zerotier-0.00.1/LICENSE
+/usr/local/share/licenses/pfSense-pkg-zerotier-0.00.1/APACHE20
+pkg/zerotier.xml
+pkg/zerotier.inc
+www/zerotier.php
+www/zerotier_networks.php
+www/zerotier_peers.php
+www/zerotier_controller.php
+www/zerotier_controller_network.php
+share/pfSense-pkg-zerotier/info.xml

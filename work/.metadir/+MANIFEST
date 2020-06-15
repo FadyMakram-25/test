@@ -1,0 +1,16 @@
+name: "pfSense-pkg-zerotier"
+version: "0.00.1"
+origin: net/pfSense-pkg-zerotier
+comment: <<EOD
+pfSense package zerotier
+EOD
+maintainer: grmoore18@gmail.com
+prefix: /usr/local
+categories: [ net, ]
+licenselogic: single
+licenses: [ APACHE20, ]
+deps: { 
+"zerotier": {origin: "net/zerotier", version: "1.2.4_2"}
+}
+options: {
+}
