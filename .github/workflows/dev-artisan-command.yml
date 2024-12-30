@@ -1,9 +1,5 @@
-# This is a basic workflow that is manually triggered
+name: Run Artisan Command on Remote Server
 
-name: 020-manual-input-workflow
-
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
     inputs:
@@ -23,61 +19,27 @@ on:
         description: 'Should workflow notify team?'
         required: true
         type: boolean
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
-    # The type of runner that the job will run on
+  artisan-command:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}"
+    # Step 1: Checkout the repository (optional if you don't need code context)
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-# name: Run Artisan Command on Remote Server
+    # Step 2: Set up SSH connection
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.GCP_VM_DEV_PRIVATE_KEY }}
 
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       command:
-#         description: 'Artisan command to execute'
-#         required: true
-#         default: 'ls -lah'
-#       environments:
-#         description: 'The environments to deploy to (comma-separated)'
-#         required: true
-#         type: choice
-#         options:
-#           - production
-#           - staging
-#           - development
-#       notify:
-#         description: 'Should workflow notify team?'
-#         required: true
-#         type: boolean
-
-# jobs:
-#   artisan-command:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     # Step 1: Checkout the repository (optional if you don't need code context)
-#     - name: Checkout code
-#       uses: actions/checkout@v3
-
-#     # Step 2: Set up SSH connection
-#     - name: Set up SSH agent
-#       uses: webfactory/ssh-agent@v0.7.0
-#       with:
-#         ssh-private-key: ${{ secrets.GCP_VM_DEV_PRIVATE_KEY }}
-
-#     # Step 3: Connect to the remote server and run the Artisan command
-#     - name: Run Artisan Command on Server
-#       env:
-#           USER: ubuntu # Replace with your actual GCP VM username
-#           HOST: 34.166.60.81 # Replace with your actual GCP VM IP or hostname
-#       run: |
-#         ssh -o StrictHostKeyChecking=no ${USER}@${HOST} \
-#           "sudo su -c 'docker exec -i dev-inventory php artisan ${{ github.event.inputs.command }}'"
+    # Step 3: Connect to the remote server and run the Artisan command
+    - name: Run Artisan Command on Server
+      env:
+          USER: ubuntu # Replace with your actual GCP VM username
+          HOST: 34.166.60.81 # Replace with your actual GCP VM IP or hostname
+      run: |
+        ssh -o StrictHostKeyChecking=no ${USER}@${HOST} \
+          "sudo su -c 'docker exec -i dev-inventory php artisan ${{ github.event.inputs.command }}'"
