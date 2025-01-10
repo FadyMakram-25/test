@@ -7,18 +7,18 @@ on:
         description: 'Artisan command to execute'
         required: true
         default: 'ls -lah'
-      environments:
-        description: 'The environments to deploy to (comma-separated)'
-        required: true
-        type: choice
-        options:
-          - production
-          - staging
-          - development
-      notify:
-        description: 'Should workflow notify team?'
-        required: true
-        type: boolean
+      # environments:
+      #   description: 'The environments to deploy to (comma-separated)'
+      #   required: true
+      #   type: choice
+      #   options:
+      #     - production
+      #     - staging
+      #     - development
+      # notify:
+      #   description: 'Should workflow notify team?'
+      #   required: true
+      #   type: boolean
 
 jobs:
   artisan-command:
