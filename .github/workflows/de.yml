@@ -4,21 +4,15 @@ on:
   push:
     branches:
       - master
-    # paths-ignore:
-    #   - ".github/**"
   pull_request:
     branches:
       - master
-    # paths-ignore:
-    #   - ".github/**"
-  # push:
-  #   branches: [ "main", "staging" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-        # Runs a single command using the runners shell
+      # Runs a single command using the runner's shell
       - name: Send greeting
         run: echo "Hello ${{ github.event.inputs.name }}"
 
@@ -28,17 +22,32 @@ jobs:
 
     permissions:
       deployments: write
-    
+
     steps:
       - uses: actions/checkout@v4
 
-      - uses: chrnorm/deployment-action@v2
-        name: Create GitHub deployment
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: '${{ github.token }}'
-        #   environment-url: http://my-app-url.com
+          environment-url: http://my-app-url.com
           environment: production
 
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
 
-# https://support.atlassian.com/jira-cloud-administration/docs/link-github-workflows-and-deployments-to-jira-issues/
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'
