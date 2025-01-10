@@ -1,0 +1,28 @@
+name: Production Build & Push Docker Image to DockerHub
+
+on:
+  push:
+    branches:
+      - main
+    # paths-ignore:
+    #   - ".github/**"
+
+  pull_request:
+    branches:
+      - main
+    # paths-ignore:
+    #   - ".github/**"
+
+  # push:
+  #   branches: [ "main", "staging" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: echo "Hello ${{ github.event.inputs.name }}"
