@@ -6,23 +6,35 @@ on:
       - master
     # paths-ignore:
     #   - ".github/**"
-
   pull_request:
     branches:
       - master
     # paths-ignore:
     #   - ".github/**"
-
   # push:
   #   branches: [ "main", "staging" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
+
+  deploy:
+    name: Deploy my app
+    runs-on: ubuntu-latest
+
+    permissions:
+      deployments: write
+    
+    steps:
+    - uses: actions/checkout@v1
+    
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: echo "Hello ${{ github.event.inputs.name }}"
+
+
+# https://support.atlassian.com/jira-cloud-administration/docs/link-github-workflows-and-deployments-to-jira-issues/
